@@ -1,0 +1,70 @@
+---
+title: "Gender distribution of COVID-19"
+author: "Nicolly Oliveira Santos"
+format: 
+  html:
+    toc: true
+    toc-location: body 
+    code-fold: show
+    code-tools: true
+    df-print: paged
+    embed-resources: true
+  pdf: 
+    toc: true
+  docx: 
+    toc: true
+editor_options: 
+  chunk_output_type: inline
+editor: visual
+---
+
+```{r}
+#| output: false
+# Load libraries
+library(here)
+library(tidyverse)
+library(lubridate)
+install.packages("unibeCols", repos = "https://ctu-bern.r-universe.dev")
+library(medicaldata)
+library(unibeCols)
+```
+
+## Introduction
+
+The aim of this study was to evaluate the distribution of confirmed cases of COVID-19 according to gender. 
+
+## Data
+15524 patients of different ages and both genders were testing for COVID-19 and the positive cases were registered.
+
+```{r}
+#| output: false
+# Read data
+data <- medicaldata::covid_testing
+```
+
+
+
+```{r}
+# Process data
+library(tidyverse)
+covid_df <- data %>% select(gender, result)
+covid_df
+result_positive <- subset(covid_df, result == "positive")
+print(result_positive)
+```
+
+@figure-cases shows the distribution of confirmed positive cases of COVID-19 according to gender.
+```{r}
+#| label: fig-cases
+#| fig-cap: "Distribution of COVID-19 according to gender"
+#| fig-width: 8
+#| fig-height: 4
+plot_covid <- ggplot(data = result_positive, 
+                              mapping = aes(x = gender, y = result, color=gender)) + 
+  geom_col(position = "stack", alpha = 0.5, fill = "white", 
+           linetype = "solid", linewidth = 1.0, width = 0.5)
+plot_covid
+```
+
+## Conclusions
+There were more confirmed cases of COVID-19 for the female gender.
